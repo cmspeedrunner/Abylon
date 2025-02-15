@@ -30,28 +30,98 @@ No brackets are needed when printing or assigning variables. Speaking of which..
 ## Variables
 ```kotlin
 fun main(){
-var hello = "Hello, World!"
-write hello
+  var hello = "Hello, World!"
+  write hello
 }
 ```
 And as you can see, writing variables is as simple as that. Heres an example with some numbers:
 ```kotlin
 fun main(){
-var x = 100
-var y = 100
-var z = x+y
-write z * z
+  var x = 100
+  var y = 100
+  var z = x+y
+  write z * z
 }
 ```
 You can reassign variables and assign variables to other variables, another example with strings:
 
 ```kotlin
 fun main(){
-var hello = "Hello, " + "World!"
-write hello
-hello = "Sup, World!"
-write hello
+  var hello = "Hello, " + "World!"
+  write hello
+  var hello = "Sup, World!"
+  write hello
 }
 ```
 There are a few problems, just with the C transpiling, but, this is a small project and I am working on a larger compiler soon, this is literally only 500 lines or so
-### Thank you for reading though - any contributions are GREATLY appreciated!!!
+
+### Other Variable types
+This is an example of floats and booleans in Abylon
+```kotlin
+fun main(){
+  var bool1 = true
+  var bool2 = false
+  write bool1 + bool2
+  var flt = 1.1
+  write flt*flt
+}
+```
+
+# Compiling
+To <s>compile</s> Transpile your code, run the command<br>
+`py main.py yourfile.abyl`<br>
+There are a few flags you can use, I will use this program and show you how it looks with some of the included flags.<br>
+<br>
+***test.abyl***
+```kotlin
+fun main(){
+    var hello = "Hello, "
+    write hello + "World!"
+}
+```
+### -t flag (Outputs compile speed)
+```
+py main.py test.abyl -t
+Compiled in 0.116s
+```
+
+### -c flag (Outputs c code)
+```
+py main.py test.abyl -c
+
+═════════C CODE═════════
+0:   #include <stdio.h>
+1:   #include <stdbool.h>
+2:   #include <string.h>
+3:   #include <stdlib.h>
+4:   void main(){
+5:   char *hello = "Hello, ";
+6:   printf("%s%s\n", hello , "World!");
+7:   }
+═══════════════════════════
+```
+
+### -v flag (Outputs variable table)
+```
+py main.py test.abyl -v
+
+═════════VARIABLE TABLE═════════
+VARIABLE NAME: hello VARIABLE TYPE: STRING:  VARIABLE VALUE: "Hello, "
+════════════════════════════════
+```
+
+### -r flag (Runs the executable)
+```
+py main.py test.abyl -r
+Hello, World!
+
+```
+### -f flag (Keeps the c translated code instead of removing it)
+```
+py main.py test.abyl -f
+
+```
+### In closing
+In closing, this is tiny, so small, 500 lines and I want to add more, This is just a tester project and I thought I would get it up here for some community feedback as I want to create my own compiler in c at some point<br>
+Thats why I made this project, I want to learn C better and I thought a transpiler from my own baby language into it would help me learn, I was wrong lmao, this was just alot of errors and barely works.
+## Thank you for reading though - any contributions are GREATLY appreciated!!!
