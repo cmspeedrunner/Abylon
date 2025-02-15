@@ -1,0 +1,5 @@
+fun main(){
+    write "Hello, "+"World!"
+    var x = "Hello, " + "World!"
+    write x + x
+}
