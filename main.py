@@ -390,28 +390,53 @@ def Assemble(TokenList, ValueList):
                     VarTypes.append("STRING: ")
                     CVariableCall = "char *"+str(varname) + " "+str(operand)+ " "+value+";"
                     CAbylon.append(CVariableCall)
+                
                 else:
                     args = value.split("+")
-                    
+                    Type = ""
                     for c, item in enumerate(args):
                         varArg = (item.strip())
                         
                         for c2, item2 in enumerate(VarNames):
                             if varArg == item2:
                                 varTypeof = VarTypes[c2]
+                                Type = varTypeof
                                 if varTypeof == "STRING: ":
                                     arglistStr.append(str(VarValues[c2]).replace("\"", ""))
                                     valueOf = "".join(arglistStr)
                                     valueOf = valueOf+"\""
                                     
                                     CVariableCall = "char *"+str(varname) + " "+str(operand)+ " "+valueOf+";"
+
                                 elif varTypeof == "INT: ":
-                                    
                                     valueOf = value
                                     CVariableCall = "int "+str(varname) + " "+str(operand)+ " "+valueOf+";"
+                                elif varTypeof == "FLOAT: ":
+                                    valueOf = value
+                                    CVariableCall = "double "+str(varname) + " "+str(operand)+ " "+valueOf+";"
+                                elif varTypeof == "BOOL: ":
+                                    valueOf = value
+                                    CVariableCall = "bool "+str(varname) + " "+str(operand)+ " "+valueOf+";"
+                            else:
+                                
+                                if args[0].strip().isdigit():
+                                    valueOf = value
+                                    Type = "INT: "
+                                    CVariableCall = "int "+str(varname) + " "+str(operand)+ " "+valueOf+";"
 
+                                elif "." in args[0].strip():
+                                    valueOf = value
+                                    Type = "FLOAT: "
+                                    CVariableCall = "double "+str(varname) + " "+str(operand)+ " "+valueOf+";"
+                                elif args[0].strip() == "true" or args[0].strip() == "false":
+                                    valueOf = value
+                                    Type = "BOOL: "
+                                    CVariableCall = "bool "+str(varname) + " "+str(operand)+ " "+valueOf+";"
 
-                    VarTypes.append(varTypeof)
+                                
+
+                    VarTypes.append(Type)
+                    
                     VarValues[VarValues.index(value)] = valueOf
                     CAbylon.append(CVariableCall)
 
