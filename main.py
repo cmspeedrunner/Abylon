@@ -578,7 +578,7 @@ def Assemble(TokenList, ValueList):
             Location = (VarNames.index(varname))
             VarValues[Location] = value
             vartype = (VarTypes[Location])
-            print(varname, value, vartype)
+            
 
             if value.startswith("\"") and value.endswith("\""):
                 if "+" in value:
@@ -657,16 +657,53 @@ CAbylon.append("}")
 
 
 def debug():
+
+    print(colors.fg.purple+"\n═════════"+colors.fg.green+"C CODE"+colors.fg.purple+"═════════"+colors.fg.cyan)
+    for i, item in enumerate(CAbylon):
+        print(colors.fg.green+str(i)+":   "+colors.fg.cyan+item)
+    print(colors.fg.purple+"\n═══════════════════════════"+colors.reset)
+
+
+
+    
+
+
+try:    
+    with open(fileName.split(".")[0]+".c", "x") as f:
+
+        for i, item in enumerate(CAbylon):
+            f.write(item +"\n")
+        f.close()
+
+except FileExistsError:
+    with open(fileName.split(".")[0]+".c", "w") as f:
+        for i, item in enumerate(CAbylon):
+            f.write(item +"\n")
+        f.close()
+
+
+commandslist = " ".join(sys.argv)
+
+start = time.time()
+os.system("gcc "+fileName.split(".")[0]+".c -o "+fileName.split(".")[0]+".exe")
+stop = time.time()-start
+
+if "-t" in commandslist:
+    print(colors.fg.cyan+"Compiled in "+colors.fg.green+colors.underline+str(stop)[0:5]+"s"+colors.reset)
+    
+
+if "-c" in commandslist:
+    debug()
+    
+
+if "-f" not in commandslist:
+    os.remove(fileName.split(".")[0]+".c")
+
+if "-v" in commandslist:
     print(colors.fg.blue+"\n═════════"+colors.fg.orange+"VARIABLE TABLE"+colors.fg.blue+"═════════")
     for iv, item in enumerate(VarNames):
         
         print(colors.fg.cyan+"VARIABLE NAME: "+colors.fg.blue+item + colors.fg.cyan+" VARIABLE TYPE: "+colors.fg.blue+str(VarTypes[iv])+colors.fg.cyan+" VARIABLE VALUE: "+colors.fg.blue+str(VarValues[iv])+colors.fg.blue)
-    
-    print(colors.fg.purple+"\n═════════"+colors.fg.green+"C CODE"+colors.fg.purple+"═════════"+colors.fg.cyan)
-    for i, item in enumerate(CAbylon):
-        print(colors.fg.cyan+item)
-    print(colors.fg.purple+"\n═══════════════════════════"+colors.reset)
-    
-    
-debug()
-    
+    print("════════════════════════════════"+colors.reset)
+if "-r" in commandslist:
+    os.system(fileName.split(".")[0])
