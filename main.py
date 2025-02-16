@@ -525,10 +525,6 @@ CAbylon.append("}")
 
 
 def debug():
-    print(colors.fg.blue+"\n═════════"+colors.fg.orange+"VARIABLE TABLE"+colors.fg.blue+"═════════")
-    for iv, item in enumerate(VarNames):
-        
-        print(colors.fg.cyan+"VARIABLE NAME: "+colors.fg.blue+item + colors.fg.cyan+" VARIABLE TYPE: "+colors.fg.blue+str(VarTypes[iv])+colors.fg.cyan+" VARIABLE VALUE: "+colors.fg.blue+str(VarValues[iv])+colors.fg.blue)
 
     print(colors.fg.purple+"\n═════════"+colors.fg.green+"C CODE"+colors.fg.purple+"═════════"+colors.fg.cyan)
     for i, item in enumerate(CAbylon):
