@@ -600,19 +600,21 @@ def Assemble(TokenList, ValueList):
 
             elif "\"" in value:
                 args = value.split("+")
-               
+                
                 for num, givenVar in enumerate(args):
                     args[num] = args[num].strip()
+                    
                     for num2, names, in enumerate(VarNames):
                         if givenVar.strip() == names.strip():
                             givenVar=(givenVar.strip())
                             VarLoc = VarNames.index(names.strip())
                             getValue = str(VarValues[VarLoc])
+                            args[num] = args[num].replace(givenVar, getValue)
 
                 
                 args ="".join(args).replace("\"", "").strip()
                 
-                args = args.replace(givenVar.strip(), getValue.replace("\"", ""))
+                
                 VarValues[Location] = "\""+args+"\""
                 CVariableCall = str(varname) + " "+str(operand)+ " \""+args+"\";"
                 CAbylon.append(CVariableCall)
