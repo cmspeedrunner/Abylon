@@ -1,0 +1,12 @@
+fun main(){
+    var h = "H" 
+    var e = "e"
+    var l = "l"
+    var o = "o"
+    var comma = ","
+    var w = "W"
+    var r = "r"
+    var d = "d"
+    var bang = "!"
+    write h+e+l+l+o+comma+" "+w+o+r+l+d+bang
+}

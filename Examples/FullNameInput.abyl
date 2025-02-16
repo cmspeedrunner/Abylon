@@ -1,0 +1,7 @@
+fun main(){
+    var Fname = readStr "Enter first name>"
+    var Sname = readStr "Enter second name>"
+    var Mname = readStr "Enter middle name>"
+    var fullName = Fname + Mname + Sname
+    write "Your full name is: "+ fullName
+}
