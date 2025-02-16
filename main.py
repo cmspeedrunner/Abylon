@@ -538,7 +538,7 @@ def debug():
 
 
     
-debug()
+
 
 try:    
     with open(fileName.split(".")[0]+".c", "x") as f:
