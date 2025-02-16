@@ -26,7 +26,31 @@ fun main(){
 write "Hello, World!"
 }
 ```
-No brackets are needed when printing or assigning variables. Speaking of which...
+In Abylon, you can use `write` or `put` to output things. `write` will output values with a newline at the end, wheras `put` will output values with no newline.<br>
+This is an example to show the difference:<br>
+```kotlin
+fun main(){
+  write "Hello, "
+  write "World!"
+}
+```
+This would output:
+```
+Hello,
+World!
+```
+But, if your program used `put` like this:
+```kotlin
+fun main(){
+  put "Hello, "
+  put "World!"
+}
+```
+This would output:
+```
+Hello, World!
+```
+
 ## Variables
 ```kotlin
 fun main(){
@@ -78,6 +102,44 @@ fun main(){
   write bool1 + bool2
   var flt = 1.1
   write flt*flt
+}
+```
+## Input
+Getting input with Abylon is easy, for example, if I wanted to get the users name, this is what it would look like:
+```kotlin
+fun main(){
+  var name = read "Enter your name> "
+}
+```
+In my example I have some text that will be displayed before getting input, you dont need this though, for example:
+```kotlin
+fun main(){
+  var name = read
+}
+```
+However, when getting input of different types, you need to specify.`read` will by default get string input, but if you wanted to get an integer or a float, you would have to use different keywords, for example:
+
+```kotlin
+fun main(){
+  var userName = read "Enter your name>"
+  var userSecondName = readStr "Enter your second name>"
+  var userAge = readInt "Enter your age>"
+  var userBalance = readFlt "Enter your account balance>"
+}
+```
+(*Keep in mind, `read` and `readStr` do the same thing in Abylon*)<br>
+As you can see, getting input is pretty simple, here is a real life example of an Abylon program that uses input:
+```kotlin
+fun main(){
+    // Getting user values, they're strings so we can use read
+    var userName = read "Enter your name: "
+    var enemyName = read "Enter the name of your enemy: "
+
+    // Writing with a newline, the opening text
+    write "Word on the street is "+userName
+    // Using put will print them all on one line.
+    put " is a cool dude and "+enemyName
+    put " is a doofus."
 }
 ```
 
