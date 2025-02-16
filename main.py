@@ -403,10 +403,10 @@ def Assemble(TokenList, ValueList):
                                     arglistStr.append(str(VarValues[c2]).replace("\"", ""))
                                     valueOf = "".join(arglistStr)
                                     valueOf = valueOf+"\""
-                                    print(valueOf)
+                                    
                                     CVariableCall = "char *"+str(varname) + " "+str(operand)+ " "+valueOf+";"
                                 elif varTypeof == "INT: ":
-                                    print(value)
+                                    
                                     valueOf = value
                                     CVariableCall = "int "+str(varname) + " "+str(operand)+ " "+valueOf+";"
 
