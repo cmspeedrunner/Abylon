@@ -367,8 +367,12 @@ def Assemble(TokenList, ValueList):
         if varname not in VarNames:
             VarNames.append(varname)
             VarValues.append(value)
-            if value.startswith("\"") and value.endswith("\""):
-                if "+" in value:
+            
+            
+            if "+" in value:
+                
+                if value.startswith("\"") and value.endswith("\""):
+                
                     args = list(value) 
             
                     for a, item in enumerate(args):
@@ -383,9 +387,37 @@ def Assemble(TokenList, ValueList):
                     arglistStr.append("\\n\"")         
                     value = "".join(arglistStr)
 
-                VarTypes.append("STRING: ")
-                CVariableCall = "char *"+str(varname) + " "+str(operand)+ " "+value+";"
-                CAbylon.append(CVariableCall)
+                    VarTypes.append("STRING: ")
+                    CVariableCall = "char *"+str(varname) + " "+str(operand)+ " "+value+";"
+                    CAbylon.append(CVariableCall)
+                else:
+                    args = value.split("+")
+                    
+                    for c, item in enumerate(args):
+                        varArg = (item.strip())
+                        
+                        for c2, item2 in enumerate(VarNames):
+                            if varArg == item2:
+                                varTypeof = VarTypes[c2]
+                                if varTypeof == "STRING: ":
+                                    arglistStr.append(str(VarValues[c2]).replace("\"", ""))
+                                    valueOf = "".join(arglistStr)
+                                    valueOf = valueOf+"\""
+                                    print(valueOf)
+                                    CVariableCall = "char *"+str(varname) + " "+str(operand)+ " "+valueOf+";"
+                                elif varTypeof == "INT: ":
+                                    print(value)
+                                    valueOf = value
+                                    CVariableCall = "int "+str(varname) + " "+str(operand)+ " "+valueOf+";"
+
+
+                    VarTypes.append(varTypeof)
+                    VarValues[VarValues.index(value)] = valueOf
+                    CAbylon.append(CVariableCall)
+
+
+                    
+                
             
                 
             elif "." in value:
@@ -405,6 +437,7 @@ def Assemble(TokenList, ValueList):
                 Location = VarNames.index(value)
                 TypeOfVar = VarTypes[Location]
                 VarTypes.append(TypeOfVar)
+                
                 if str(TypeOfVar) == "STRING: ":
                     CVariableCall = "char *"+str(varname) + " "+str(operand)+ " "+value+";"
                 
@@ -419,9 +452,15 @@ def Assemble(TokenList, ValueList):
                     CVariableCall = "bool "+str(varname) + " "+str(operand)+ " "+value+";"
                     CAbylon.append(CVariableCall)
             else:
-                VarTypes.append("INT: ")
-                CVariableCall = "int "+str(varname) + " "+str(operand)+ " "+value+";"
-                CAbylon.append(CVariableCall)
+                if value.startswith("\"") and value.endswith("\""):
+                    VarTypes.append("STRING: ")
+                    CVariableCall = "char *"+str(varname) + " "+str(operand)+ " "+value+";"
+                    CAbylon.append(CVariableCall)
+                else:
+                    VarTypes.append("INT: ")
+                    CVariableCall = "int "+str(varname) + " "+str(operand)+ " "+value+";"
+                    CAbylon.append(CVariableCall)
+
                 
             
 
@@ -486,13 +525,20 @@ CAbylon.append("}")
 
 
 def debug():
-    
+    print(colors.fg.blue+"\n═════════"+colors.fg.orange+"VARIABLE TABLE"+colors.fg.blue+"═════════")
+    for iv, item in enumerate(VarNames):
+        
+        print(colors.fg.cyan+"VARIABLE NAME: "+colors.fg.blue+item + colors.fg.cyan+" VARIABLE TYPE: "+colors.fg.blue+str(VarTypes[iv])+colors.fg.cyan+" VARIABLE VALUE: "+colors.fg.blue+str(VarValues[iv])+colors.fg.blue)
+
     print(colors.fg.purple+"\n═════════"+colors.fg.green+"C CODE"+colors.fg.purple+"═════════"+colors.fg.cyan)
-    
     for i, item in enumerate(CAbylon):
         print(colors.fg.green+str(i)+":   "+colors.fg.cyan+item)
     print(colors.fg.purple+"\n═══════════════════════════"+colors.reset)
 
+
+
+    
+debug()
 
 try:    
     with open(fileName.split(".")[0]+".c", "x") as f:
@@ -522,27 +568,3 @@ commandslist = " ".join(sys.argv)
     
     
     
-start = time.time()
-os.system("gcc "+fileName.split(".")[0]+".c -o "+fileName.split(".")[0]+".exe")
-stop = time.time()-start
-
-if "-t" in commandslist:
-    print(colors.fg.cyan+"Compiled in "+colors.fg.green+colors.underline+str(stop)[0:5]+"s"+colors.reset)
-    
-
-if "-c" in commandslist:
-    debug()
-    
-
-if "-f" not in commandslist:
-    os.remove(fileName.split(".")[0]+".c")
-
-if "-v" in commandslist:
-    print(colors.fg.blue+"\n═════════"+colors.fg.orange+"VARIABLE TABLE"+colors.fg.blue+"═════════")
-    for iv, item in enumerate(VarNames):
-        
-        print(colors.fg.cyan+"VARIABLE NAME: "+colors.fg.blue+item + colors.fg.cyan+" VARIABLE TYPE: "+colors.fg.blue+str(VarTypes[iv])+colors.fg.cyan+" VARIABLE VALUE: "+colors.fg.blue+str(VarValues[iv])+colors.fg.blue)
-    print("════════════════════════════════"+colors.reset)
-if "-r" in commandslist:
-    os.system(fileName.split(".")[0])
-                
