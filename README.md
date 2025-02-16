@@ -53,7 +53,21 @@ fun main(){
   write hello
 }
 ```
-There are a few problems, just with the C transpiling, but, this is a small project and I am working on a larger compiler soon, this is literally only 500 lines or so
+You can also assign a variable to be the sum of others, heres an example:
+```kotlin
+fun main(){
+  var hello = "Hello, "
+  var world = "World!"
+  var greeting = hello + world
+
+  var num1 = 100
+  var num2 = 200
+  var sum = num1 + num2
+
+  write greeting
+  write sum
+}
+```
 
 ### Other Variable types
 This is an example of floats and booleans in Abylon
