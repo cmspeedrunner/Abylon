@@ -1,0 +1,14 @@
+fun main(){
+    
+    var userAge = readInt "Enter your Age>"
+    var userName = readStr "Enter your Name>"
+    var userBalance = readFlt "Enter your balance>"
+    
+    put "Hello, "
+    write userName
+    put "! You are " 
+    write userAge
+    put " years of age and have a bank balance of $"
+    write userBalance 
+    
+}

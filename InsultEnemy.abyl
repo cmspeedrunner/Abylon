@@ -1,0 +1,7 @@
+fun main(){
+    var userName = readStr "Enter your name: "
+    var enemyName = readStr "Enter the name of your enemy: "
+    write "Word on the street is "+userName
+    put " is a cool dude and "+enemyName
+    put " is a doofus."
+}

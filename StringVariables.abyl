@@ -1,0 +1,13 @@
+fun main(){
+    //Assigning greeting variable
+    var Greeting = "Hello, "
+
+    //Outputting it with "World!" added to the end
+    write Greeting + "World!"
+
+    // Reassigning the variable
+    var Greeting = "Hello, World!"
+
+    write Greeting
+    
+}
