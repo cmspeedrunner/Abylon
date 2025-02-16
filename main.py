@@ -554,14 +554,32 @@ except FileExistsError:
         f.close()
 
 
-
-
-
-
-
-
 commandslist = " ".join(sys.argv)
 
+start = time.time()
+os.system("gcc "+fileName.split(".")[0]+".c -o "+fileName.split(".")[0]+".exe")
+stop = time.time()-start
+
+if "-t" in commandslist:
+    print(colors.fg.cyan+"Compiled in "+colors.fg.green+colors.underline+str(stop)[0:5]+"s"+colors.reset)
+    
+
+if "-c" in commandslist:
+    debug()
+    
+
+if "-f" not in commandslist:
+    os.remove(fileName.split(".")[0]+".c")
+
+if "-v" in commandslist:
+    print(colors.fg.blue+"\n═════════"+colors.fg.orange+"VARIABLE TABLE"+colors.fg.blue+"═════════")
+    for iv, item in enumerate(VarNames):
+        
+        print(colors.fg.cyan+"VARIABLE NAME: "+colors.fg.blue+item + colors.fg.cyan+" VARIABLE TYPE: "+colors.fg.blue+str(VarTypes[iv])+colors.fg.cyan+" VARIABLE VALUE: "+colors.fg.blue+str(VarValues[iv])+colors.fg.blue)
+    print("════════════════════════════════"+colors.reset)
+if "-r" in commandslist:
+    os.system(fileName.split(".")[0])
+                
 
 
     
