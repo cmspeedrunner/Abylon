@@ -142,7 +142,33 @@ fun main(){
     put " is a doofus."
 }
 ```
-
+## Arrays
+Abylon has array support, and although limited, I plan to expand this.<br>
+So, to set a variable to be an array, it would look like this:
+```kotlin
+fun main(){
+  var array = [1,2,3,4,5]
+}
+```
+We can access a value from this array like so:
+```kotlin
+fun main(){
+  var array = [1,2,3,4,5]
+  write array[0]
+  write array[1]
+  // This would output '1' then '2'
+}
+```
+We can replace a value from an array using the `replace` keyword:
+```kotlin
+fun main(){
+  var array = ["Hello, ", "World", "!"]
+  // Array is "Hello, World!"
+  replace array[0] = "Goodbye, "
+  // Array is "Goodbye, World!"
+}
+```
+Much more array support will be added, such as an inbuilt sort function and more.
 # Compiling
 To <s>compile</s> Transpile your code, run the command<br>
 `py main.py yourfile.abyl`<br>
