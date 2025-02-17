@@ -1,0 +1,8 @@
+fun main(){
+    var age = readInt "Enter your age: "
+    var timeLeft = 85 - age
+
+    put "Statistically speaking, you have "
+    put timeLeft
+    put " years left on this planet"
+}

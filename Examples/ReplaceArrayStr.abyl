@@ -1,0 +1,8 @@
+fun main(){
+    var greeting = ["Hello, ", "World", "!"]
+
+    write greeting[1]
+    replace greeting[1] = "Goodbye, "
+    write greeting[1]
+
+}

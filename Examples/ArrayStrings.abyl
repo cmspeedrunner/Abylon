@@ -1,0 +1,5 @@
+fun main(){
+    var helloworld = ["Hello, ", "World!"]
+    put helloworld[0]
+    put helloworld[1]
+}

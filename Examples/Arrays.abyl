@@ -1,0 +1,18 @@
+fun main(){
+    var nums = [1,2,3,4]
+    var flts = [1.1, 2.2, 3.3, 4.5]
+    var HelloWorld = ["Hello, ", "World!"]
+    write nums[0]
+    write flts[1]
+    write HelloWorld[1]
+
+ 
+    var array = ["A", "B", "C", "D", "E", "F", "G"]
+    write "This is the array:"
+    write "['A', 'B', 'C', 'D', 'E', 'F', 'G']"
+    var numKey = readInt "What value in the array do you want to print?\n(0-6)> "
+    numKey = numKey
+    write array[numKey]
+    
+
+}
