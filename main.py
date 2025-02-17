@@ -4,8 +4,8 @@ import time
 os.system("")
 
 ###---> Setting up all the constants and lists to be appended to <---###
-TokenPrefix = ["FUNCTION:", "OUTPUT:", "VARIABLE:", "RETURN:", "PUT:"] # This is the token prefix
-Identifiers = ["fun", "write", "var", "return", "put"] # This is what the transpiler is searching for, it matches it up to the list above
+TokenPrefix = ["FUNCTION:", "OUTPUT:", "VARIABLE:", "RETURN:", "PUT:", "REPLACE:"] # This is the token prefix
+Identifiers = ["fun", "write", "var", "return", "put", "replace"] # This is what the transpiler is searching for, it matches it up to the list above
 
 class colors:
  
@@ -116,7 +116,18 @@ def Assemble(TokenList, ValueList):
         CAbylon.append(defaultFunType+" "+FuncName)
         
 
-    
+    def caseReplace():
+        outputValue = ValueList[i]
+        arrayCall = str(outputValue).split("=")[0].strip()
+        newVal = str(outputValue).split("=")[1].strip()
+        
+        if newVal.isdigit():
+            CReplaceCall = outputValue+";"
+            CAbylon.append(CReplaceCall)
+        elif "\"" in newVal:
+            
+            CReplaceCall = "strcpy("+arrayCall+", "+newVal+");"
+            CAbylon.append(CReplaceCall)
     def caseWrite(nl):
         outputValue = ValueList[i]
         
@@ -133,7 +144,7 @@ def Assemble(TokenList, ValueList):
                 CPrintCall = CPrintCall +outputValue+");"
                 CPrintCall= str(CPrintCall).replace("\");",nl+"\");")
                 CAbylon.append(CPrintCall)
-
+        
         elif "+" in str(outputValue):
                 args = str(outputValue).split("+")
                 
@@ -344,28 +355,48 @@ def Assemble(TokenList, ValueList):
             
             for y, item in enumerate(VarNames):
                 if item == outputValue:
+                    
                     VariableTypeRef = str(VarTypes[y])
                     if VariableTypeRef == "STRING: ":
                         CPrintCall = CPrintCall +"%s"+nl+"\", "+outputValue+");"
                         CAbylon.append(CPrintCall)
-                    if VariableTypeRef == "INT: ":
+                    elif VariableTypeRef == "INT: ":
                         CPrintCall = CPrintCall +"%d"+nl+"\", "+outputValue+");"
                         CAbylon.append(CPrintCall)
-                    if VariableTypeRef == "BOOL: ":
+                    elif VariableTypeRef == "BOOL: ":
                         CPrintCall = CPrintCall +"%d"+nl+"\", "+outputValue+");"
                         CAbylon.append(CPrintCall)
-                    if VariableTypeRef == "FLOAT: ":
+                    elif VariableTypeRef == "FLOAT: ":
                         CPrintCall = CPrintCall +"%f"+nl+"\", "+outputValue+");"
                         CAbylon.append(CPrintCall)
-                    if VariableTypeRef == "STRING INPUT: ":
+                    elif VariableTypeRef == "STRING INPUT: ":
                         CPrintCall = CPrintCall +"%s\", "+outputValue+");"
                         CAbylon.append(CPrintCall)
-                    if VariableTypeRef == "INT INPUT: ":
+                    elif VariableTypeRef == "INT INPUT: ":
                         CPrintCall = CPrintCall +"%d\", "+outputValue+");"
                         CAbylon.append(CPrintCall)
-                    if VariableTypeRef == "FLOAT INPUT: ":
+                    elif VariableTypeRef == "FLOAT INPUT: ":
                         CPrintCall = CPrintCall +"%f\", "+outputValue+");"
                         CAbylon.append(CPrintCall)
+        
+        elif "[" and "]" in str(outputValue):
+            CPrintCall = "printf(\""
+            varname = str(outputValue).split("[")[0]
+            
+            for y, item in enumerate(VarNames):
+                if item == varname:
+                    VariableTypeRef = str(VarTypes[y])
+                    if VariableTypeRef == "INT ARRAY: ":
+                        CPrintCall = CPrintCall +"%d"+nl+"\", "+outputValue+");"
+                        CAbylon.append(CPrintCall)
+                    elif VariableTypeRef == "STRING ARRAY: ":
+                        CPrintCall = CPrintCall +"%s"+nl+"\", "+outputValue+");"
+                        CAbylon.append(CPrintCall)
+                    elif VariableTypeRef == "FLOAT ARRAY: ":
+                        CPrintCall = CPrintCall +"%f"+nl+"\", "+outputValue+");"
+                        CAbylon.append(CPrintCall)
+                    
+                    
         
     
         
@@ -379,21 +410,39 @@ def Assemble(TokenList, ValueList):
         varname = variables[0]
         operand = variables[1]
         value = lineFull.split(operand)[1].strip()
+        
         arglistNum = []
         arglistStr = ["\""]
-        if variables[2] == "readStr":
-            inputString = value.replace("readStr", "").strip()
+        if variables[2] == "read":
+            inputString = value.replace("read", "").strip()
             VarNames.append(varname)
             VarValues.append("User input")
             VarTypes.append("STRING INPUT: ")
-            CVariableCall = "printf("+inputString+");"
-            CAbylon.append(CVariableCall)
+            if inputString != "":
+                CVariableCall = "printf("+inputString+");"
+                CAbylon.append(CVariableCall)
             CVariableCall = "char "+varname+"[50];"
             CAbylon.append(CVariableCall)
             CVariableCall = "fgets("+varname+", 50, stdin);"
             CAbylon.append(CVariableCall)
             CVariableCall = varname+"[strcspn("+varname+", \"\\n\")] = 0;"
             CAbylon.append(CVariableCall)
+
+        elif variables[2] == "readStr":
+            inputString = value.replace("readStr", "").strip()
+            VarNames.append(varname)
+            VarValues.append("User input")
+            VarTypes.append("STRING INPUT: ")
+            if inputString != "":
+                CVariableCall = "printf("+inputString+");"
+                CAbylon.append(CVariableCall)
+            CVariableCall = "char "+varname+"[50];"
+            CAbylon.append(CVariableCall)
+            CVariableCall = "fgets("+varname+", 50, stdin);"
+            CAbylon.append(CVariableCall)
+            CVariableCall = varname+"[strcspn("+varname+", \"\\n\")] = 0;"
+            CAbylon.append(CVariableCall)
+
             
             
         elif variables[2] == "readInt":
@@ -403,10 +452,14 @@ def Assemble(TokenList, ValueList):
             VarTypes.append("INT INPUT: ")
             CVariableCall = "int "+varname+";"
             CAbylon.append(CVariableCall)
-            CVariableCall = "printf("+inputString+");"
+            if inputString != "":
+                CVariableCall = "printf("+inputString+");"
+                CAbylon.append(CVariableCall)
+            CVariableCall = "scanf(\"%d\", &"+varname+");"
             CAbylon.append(CVariableCall)
-            CVariableCall = "scanf(\"%d\", &"+varname+");\ngetchar();"
+            CVariableCall = "getchar();"
             CAbylon.append(CVariableCall)
+
         elif variables[2] == "readFlt":
             inputString = value.replace("readFlt", "").strip()
             VarNames.append(varname)
@@ -414,9 +467,12 @@ def Assemble(TokenList, ValueList):
             VarTypes.append("FLOAT INPUT: ")
             CVariableCall = "float "+varname+";"
             CAbylon.append(CVariableCall)
-            CVariableCall = "printf("+inputString+");"
+            if inputString != "":
+                CVariableCall = "printf("+inputString+");"
+                CAbylon.append(CVariableCall)
+            CVariableCall = "scanf(\"\\n%f\", &"+varname+");"
             CAbylon.append(CVariableCall)
-            CVariableCall = "scanf(\"\\n%f\", &"+varname+");\ngetchar();"
+            CVariableCall = "getchar();"
             CAbylon.append(CVariableCall)
 
         elif varname not in VarNames:
@@ -527,6 +583,35 @@ def Assemble(TokenList, ValueList):
                     
                 
             
+            elif value.strip().startswith("["):
+                value = value.replace("[", "{").replace("]", "}")
+                value2 = value.replace("[", "{").replace("]", "}")
+                args = value.replace("{", "").replace("}", "").split(",")
+                maxLen = []
+                if "\"" in value:
+                    num = int(value.count("\"")/2)
+                    
+                    VarTypes.append("STRING ARRAY: ")
+                    value = value.replace("{", "").replace("}", "").strip().split("\"")
+                    for g, item in enumerate(value):
+                        maxLen.append(len(item))
+                    maxLen.sort()
+                            
+                            
+                            
+                    maxCharLength = (maxLen[len(maxLen)-1])
+                    CVariableCall = "char "+str(varname)+"["+str(num)+"]["+str(maxCharLength)+"]"+str(operand)+ " "+value2+";"
+                    CAbylon.append(CVariableCall)
+                elif args[0].isdigit():
+                    num = len(args)
+                    VarTypes.append("INT ARRAY: ")
+                    CVariableCall = str(varname) + "["+str(num)+"] "+str(operand)+ " "+value+";"
+                    CAbylon.append(CVariableCall)
+                elif "." in args[0]:
+                    num = len(args)
+                    VarTypes.append("FLOAT ARRAY: ")
+                    CVariableCall = "float "+str(varname) + "["+str(num)+"] "+str(operand)+ " "+value+";"
+                    CAbylon.append(CVariableCall)
                 
             elif "." in value:
                 VarTypes.append("FLOAT: ")
@@ -648,6 +733,8 @@ def Assemble(TokenList, ValueList):
             CAbylon.append(CReturnCall)
         if item == "PUT:":
             caseWrite("")
+        if item == "REPLACE:":
+            caseReplace()
 
 
         
@@ -709,3 +796,5 @@ if "-v" in commandslist:
     print("════════════════════════════════"+colors.reset)
 if "-r" in commandslist:
     os.system(fileName.split(".")[0])
+                
+# 800 Lines lmao
